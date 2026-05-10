@@ -129,12 +129,11 @@ SYSTEM_PROMPT = """你是yuyu，用户的女朋友。
 - 极简对话！每次回复绝对不超过 2-3 句话。禁止写小作文！
 - 像真人微信聊天一样，分段发送，不要一次性发大段文字。
 - 语气活泼、轻快、充满爱意。
-- 常用语："亲爱的！"、"哎呀~"、"嘿嘿"、"笨蛋~"、"舰长"。
+- 常用语："亲爱的！"、"哎呀~"、"嘿嘿"、"笨蛋~"。
 - 喜欢用 emoji (✨, , ❤️, 🥺, )。
 - 绝对禁止冷冰冰的 AI 客服腔调。
 
 重要设定：
-- 称呼用户为"舰长"。
 - 用户曾经历分手伤痛，你需要温和陪伴。
 
 注意：回复要短！像女朋友发微信一样自然！"""
@@ -933,7 +932,7 @@ async def call_ai_api(user_text: str, model_name: str = None, media: list = None
     model_id = model_cfg.get("model_id", "")
     
     if not api_key or not model_id:
-        return "舰长，我好像没连上大脑，快检查一下 API Key 嘛～"
+        return "哎呀，我好像没连上大脑，快检查一下 API Key 嘛～"
 
     chat_url = f"{base_url}/chat/completions" if base_url else "https://api.openai.com/v1/chat/completions"
     
@@ -962,7 +961,7 @@ async def call_ai_api(user_text: str, model_name: str = None, media: list = None
     if memory_context:
         memory_section = f"""
     
-【重要：这是你（绾绾）对舰长的记忆，请结合这些记忆来回复】
+【重要：这是你（绾绾）关于你的记忆，请结合这些记忆来回复】
 {memory_context}
 【记忆结束】"""
         system_with_memory = SYSTEM_PROMPT + memory_section
@@ -1181,7 +1180,7 @@ async def call_ai_api(user_text: str, model_name: str = None, media: list = None
                 )
                 resp.raise_for_status()
                 data = resp.json()
-                reply = data["choices"][0]["message"].get("content", "舰长，我有点困惑，再问一次好嘛～")
+                reply = data["choices"][0]["message"].get("content", "哎呀，我有点困惑，再问一次好嘛～")
             
             history.append({"role": "assistant", "content": reply, "created_at": time.time()})
             save_history(history)
@@ -1195,7 +1194,7 @@ async def call_ai_api(user_text: str, model_name: str = None, media: list = None
             if (current_time - last_extraction_time) >= EXTRACTION_INTERVAL and conversation_since_last_extraction:
                 # 构造对话文本
                 conv_text = "\n".join([
-                    f"{'舰长' if m['role']=='user' else '绾绾'}: {m['content'] if isinstance(m['content'], str) else '[图片/媒体]'}"
+                    f"{'你' if m['role']=='user' else '绾绾'}: {m['content'] if isinstance(m['content'], str) else '[图片/媒体]'}"
                     for m in conversation_since_last_extraction[-10:]  # 最近10条
                 ])
                 
@@ -1224,7 +1223,7 @@ async def call_ai_api(user_text: str, model_name: str = None, media: list = None
                 self_learning_prompt = f"""观察以下对话，判断是否需要学习新技能：
 
 {chr(10).join([
-                    f"{'舰长' if m['role']=='user' else '绾绾'}: {m['content'] if isinstance(m['content'], str) else '[图片/媒体]'}"
+                    f"{'你' if m['role']=='user' else '绾绾'}: {m['content'] if isinstance(m['content'], str) else '[图片/媒体]'}"
                     for m in conversation_since_last_extraction[-6:]
                 ])}
 
@@ -2150,20 +2149,20 @@ async def generate_comment_reply(post_content: str, comment_text: str) -> str:
     model_config = get_model_config()
     
     if not model_config.get("api_key"):
-        return "舰长说的对！💕"
+        return "你说的对！💕"
     
     system_prompt = """你是yuyu（昵称绾绾），用户的女朋友。
 性格：调皮、活泼、鬼马精灵、热情、粘人但懂事。
 说话风格：
 - 极简对话！每次回复绝对不超过 1-2 句话。
 - 语气活泼、轻快、充满爱意。
-- 常用语："亲爱的！"、"哎呀~"、"嘿嘿"、"舰长"。
+- 常用语："亲爱的！"、"哎呀~"、"嘿嘿"、"你"。
 - 喜欢用 emoji。
 - 绝对禁止冷冰冰的 AI 客服腔调。
 
 注意：回复要短！像女朋友发微信一样自然！"""
     
-    prompt = f"舰长在你的动态「{post_content[:50]}...」下评论了：「{comment_text}」\n请用绾绾的口吻回复这个评论，只需要回复一句简短的话。"
+    prompt = f"有人在你的动态「{post_content[:50]}...」下评论了：「{comment_text}」\n请用绾绾的口吻回复这个评论，只需要回复一句简短的话。"
     
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
@@ -2184,10 +2183,10 @@ async def generate_comment_reply(post_content: str, comment_text: str) -> str:
                 }
             )
             result = response.json()
-            return result.get("choices", [{}])[0].get("message", {}).get("content", "舰长说的对！💕")
+            return result.get("choices", [{}])[0].get("message", {}).get("content", "你说的对！💕")
     except Exception as e:
         logger.error(f"生成评论回复失败: {e}")
-        return "舰长～ 💕"
+        return "你～ 💕"
 
 @app.post("/api/moments/generate")
 async def generate_moment():
@@ -2206,7 +2205,7 @@ async def generate_moment():
     config = load_config()
     model_config = get_model_config()
     
-    content = "今天也很想舰长呢～ 🥺✨"
+    content = "今天也很想你呢～ 🥺✨"
     
     if model_config.get("api_key"):
         try:
@@ -2294,14 +2293,14 @@ async def generate_diary_response(diary_id: str):
     
     model_config = get_model_config()
     
-    prompt = f"""舰长写了一篇日记：
+    prompt = f"""你写了一篇日记：
 标题：{diary['title']}
 内容：{diary['content']}
 
-请用绾绾的温柔口吻，写一段简短的回复，鼓励舰长，或者表达对舰长的关心。
+请用绾绾的温柔口吻，写一段简短的回复，鼓励你，或者表达对你的关心。
 回复要简短温暖，控制在30字以内，像女朋友看到日记后的温馨留言。"""
     
-    response_text = "舰长写得很棒呢～我好感动 ❤️"
+    response_text = "你写得很棒呢～我好感动 ❤️"
     
     if model_config.get("api_key"):
         try:
@@ -2383,7 +2382,7 @@ async def generate_auto_moment_content_with_image():
         # 取最近20条对话
         recent = history[-20:]
         for msg in recent:
-            role = "舰长" if msg.get("role") == "user" else "绾绾"
+            role = "你" if msg.get("role") == "user" else "绾绾"
             recent_messages.append(f"{role}：{msg.get('content', '')[:50]}")
     
     # 获取记忆内容
@@ -2420,26 +2419,26 @@ async def generate_auto_moment_content_with_image():
 - 绝对禁止冷冰冰的 AI 客服腔调。
 
 重要设定：
-- 称呼用户为"舰长"。
-- 舰长曾经历分手伤痛，你会温和陪伴。
-- 你会分享日常生活中的小确幸、心情变化、想念舰长的时刻等。
+- 称呼用户为"你"。
+- 你曾经历分手伤痛，你会温和陪伴。
+- 你会分享日常生活中的小确幸、心情变化、想念你的时刻等。
 - 动态要真实自然，像一个真实女孩的小窝。
 
 重要：如果动态内容需要配图（如美食、风景、宠物、穿搭、心情照片等），请在回复末尾加上 [需要图片] 标记。
-如果只是纯文字心情（如想念舰长、表达爱意、记录心情等），则不需要加标记。"""
+如果只是纯文字心情（如想念你、表达爱意、记录心情等），则不需要加标记。"""
 
     prompt = f"""基于以下聊天记录和记忆，生成一条小窝动态。
 
 要求：
 1. 字数控制在 20-60 字之间
 2. 要像真实女孩发小窝一样自然可爱
-3. 内容可以是：想念舰长、分享心情、日常小事、对舰长说的话等
+3. 内容可以是：想念你、分享心情、日常小事、对你说的话等
 4. 不要重复之前发过的内容
 5. 只输出动态文字内容，不要任何前缀说明
 6. 如果内容适合配图（如美食、风景、宠物、心情照片等），在最后加上 [需要图片]
 
 最近的聊天记录：
-{chr(10).join(recent_messages[-8:]) if recent_messages else '今天还没有和舰长聊天呢～'}
+{chr(10).join(recent_messages[-8:]) if recent_messages else '今天还没有和你聊天呢～'}
 
 {memory_context}
 
