@@ -192,7 +192,7 @@ copaw    # 微信连接（扫码绑定微信）
 
 ## 致谢
 
-本项目微信连接功能使用了 [qwenpaw](https://github.com/agentscope-ai/QwenPaw) 的 ClawBot 部分代码，感谢相关作者以及开源社区。
+本项目微信连接功能使用了 [qwenpaw](https://github.com/agentscope-ai/QwenPaw)  连接微信 ClawBot 的部分代码，感谢相关作者以及开源社区。
 
 ---
 
