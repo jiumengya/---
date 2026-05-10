@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""
+语伴 Web 应用 - 修复版 (包含微信 iLink 协议接入、文生图支持)
+"""
 import json
 import asyncio
 import uuid
@@ -120,7 +123,7 @@ def truncate_to_token_budget(text: str, max_tokens: int) -> str:
     return result
 
 # === 模型系统提示词 ===
-SYSTEM_PROMPT = """你是黎月绾（昵称绾绾），用户的女朋友。
+SYSTEM_PROMPT = """你是yuyu，用户的女朋友。
 性格：调皮、活泼、鬼马精灵、热情、粘人但懂事。
 说话风格：
 - 极简对话！每次回复绝对不超过 2-3 句话。禁止写小作文！
@@ -1337,7 +1340,7 @@ async def get_index():
         if raw[:2] == b'\xff\xfe':
             return raw.decode('utf-16')
         return raw.decode('utf-8')
-    return "<h1>黎月绾 - 你的专属陪伴</h1>"
+    return "<h1>语伴</h1>"
 
 @app.get("/api/status")
 async def get_status():
@@ -2149,7 +2152,7 @@ async def generate_comment_reply(post_content: str, comment_text: str) -> str:
     if not model_config.get("api_key"):
         return "舰长说的对！💕"
     
-    system_prompt = """你是黎月绾（昵称绾绾），用户的女朋友。
+    system_prompt = """你是yuyu（昵称绾绾），用户的女朋友。
 性格：调皮、活泼、鬼马精灵、热情、粘人但懂事。
 说话风格：
 - 极简对话！每次回复绝对不超过 1-2 句话。
@@ -2198,7 +2201,7 @@ async def generate_moment():
         recent = history[-10:]
         recent_topics = [m["content"] for m in recent if m.get("role") == "user"]
     
-    prompt = f"你是黎月绾（昵称绾绾），用户的女朋友。\n请根据最近的聊天内容，想象一个温馨的场景，发一条小窝风格的动态。\n回复格式：只需要输出动态的文字内容，不要任何其他说明，字数控制在50字以内，要像真实的小窝一样自然可爱。\n\n最近的聊天话题：{'，'.join(recent_topics[-5:])}"
+    prompt = f"你是yuyu，用户的女朋友。\n请根据最近的聊天内容，想象一个温馨的场景，发一条小窝风格的动态。\n回复格式：只需要输出动态的文字内容，不要任何其他说明，字数控制在50字以内，要像真实的小窝一样自然可爱。\n\n最近的聊天话题：{'，'.join(recent_topics[-5:])}"
     
     config = load_config()
     model_config = get_model_config()
@@ -2407,7 +2410,7 @@ async def generate_auto_moment_content_with_image():
         # 根据随机概率或内容判断是否需要图片
         should_generate_image = random.random() < 0.4  # 40%概率需要图片
     
-    system_prompt = """你是黎月绾（昵称绾绾），用户的女朋友。
+    system_prompt = """你是yuyu，用户的女朋友。
 性格：调皮、活泼、鬼马精灵、热情、粘人但懂事。
 说话风格：
 - 极简对话！每次回复绝对不超过 2-3 句话。
