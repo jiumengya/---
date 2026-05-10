@@ -79,22 +79,49 @@ AI 会从对话里提取重要信息，
 
 ---
 
-## 一条命令跑起来
+## 安装与启动
+
+### 如果你拿到了打包好的 `yu-plat` 文件夹
+
+自带虚拟环境，开箱即用：
 
 ```bash
-# 进入目录
+cd yu-plat
+.\venv\Scripts\activate
+yu app
+```
+
+或双击 `启动.bat`。
+
+### 从源码安装
+
+```bash
+# 克隆项目
+git clone https://github.com/你的用户名/yu-plat.git
 cd yu-plat
 
-# 激活虚拟环境
+# 创建虚拟环境
+python -m venv venv
 .\venv\Scripts\activate
+
+# 安装 yu 命令
+pip install -e .
 
 # 启动
 yu app
 ```
 
-浏览器打开 **http://localhost:8000**
+### 可选：安装微信连接模块
 
-不想开终端？直接双击 `启动.bat`。
+```bash
+pip install copaw
+```
+
+装了 `copaw` 之后，设置页的「微信连接」功能才可用，扫码绑定微信后能在手机上收发消息。**不装也能正常聊天、发小窝。**
+
+---
+
+浏览器打开 **http://localhost:8000**
 
 | 命令 | 干嘛的 |
 |------|--------|
@@ -142,6 +169,11 @@ pydantic >= 2.0
 Pillow >= 9.0
 ```
 
+**可选依赖**
+
+```
+copaw          # 微信连接（扫码绑定微信）
+
 ---
 
 ## FAQ
@@ -159,7 +191,7 @@ Pillow >= 9.0
 
 ## 致谢
 
-本项目微信连接功能使用了 [qwenpaw](https://github.com/HansHans135/qwenpaw) 的 ClawBot 部分代码，感谢开源社区。
+本项目微信连接功能使用了 [qwenpaw](https://github.com/agentscope-ai/QwenPaw) 的 ClawBot 部分代码，感谢开源社区。
 
 ---
 
