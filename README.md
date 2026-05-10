@@ -81,12 +81,12 @@ AI 会从对话里提取重要信息，
 
 ## 安装与启动
 
-### 如果你拿到了打包好的 `yu-plat` 文件夹
+### 如果你拿到了打包好的 `yu-ban` 文件夹
 
 自带虚拟环境，开箱即用：
 
 ```bash
-cd yu-plat
+cd yu-ban
 .\venv\Scripts\activate
 yu app
 ```
